@@ -1,0 +1,13 @@
+{
+	"estados" : ["A", "B"],
+	"estado_inicial": "A",
+	"estados_finais": ["B"],
+	"alfabeto_entrada": ["A", "B"],
+	"transicoes": [
+		[["A", "A", [0]], "A"],
+		[["A", "A", [1]], "B"],
+		[["B", "B", [2]], "B"],
+		[["B", "B", [2]], "B"]
+	],
+	"alfabeto_pilha": [0, 1, 2]
+}
