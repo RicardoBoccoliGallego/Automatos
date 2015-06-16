@@ -1,13 +1,14 @@
 {
-	"estados" : ["A", "B"],
-	"estado_inicial": "A",
-	"estados_finais": ["B"],
-	"alfabeto_entrada": ["A", "B"],
-	"transicoes": [
-		[["A", "A", [0]], "A"],
-		[["A", "A", [1]], "B"],
-		[["B", "B", [2]], "B"],
-		[["B", "B", [2]], "B"]
-	],
-	"alfabeto_pilha": [0, 1, 2]
+	"maquina_inicial": "A",
+	"maquinas": {
+		"A": {
+			"alfabeto": ["0", "1"],
+			"estados_finais": ["B"],
+			"estados" : ["A", "B"],
+			"estado_inicial": "A",
+			"transicoes": [
+				[["A", "0"], ["B"]]
+			]
+		}
+	}
 }
