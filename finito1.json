@@ -1,0 +1,16 @@
+{
+	"maquina_inicial": "finito",
+	"maquinas": {
+		"finito": {
+			"alfabeto": ["0", "1"],
+			"estados_finais": ["C"],
+			"estados" : ["A", "B", "C"],
+			"estado_inicial": "A",
+			"transicoes": [
+				[["A", "0"], ["B"]],
+				[["B", "1"], ["B"]],
+				[["B", "0"], ["C"]]
+			]
+		}
+	}
+}

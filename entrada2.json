@@ -1,0 +1,18 @@
+{
+	"maquina_inicial": "a1",
+	"maquinas": {
+		"a1": {
+			"alfabeto": ["a", "b", "x"],
+			"estados_finais": ["q2"],
+			"estados" : ["q1", "q2", "q3", "q4"],
+			"estado_inicial": "q1",
+			"transicoes": [
+				[["q1", "x"], ["q2"]],
+				[["q1", "a"], ["q3"]],
+				[["q4", "b"], ["q2"]],
+				[["q3", ""], ["q4", "a1"]],
+				[["q4", ""], []]
+			]
+		}
+	}
+}

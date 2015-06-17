@@ -1,13 +1,27 @@
 {
-	"maquina_inicial": "A",
+	"maquina_inicial": "machine1",
 	"maquinas": {
-		"A": {
+		"machine1": {
 			"alfabeto": ["0", "1"],
-			"estados_finais": ["B"],
-			"estados" : ["A", "B"],
+			"estados_finais": ["D"],
+			"estados" : ["A", "B", "C", "D"],
 			"estado_inicial": "A",
 			"transicoes": [
-				[["A", "0"], ["B"]]
+				[["A", "0"], ["B"]],
+				[["B", ""], ["C", "tres_uns"]],
+				[["C", "0"], ["D"]]
+			]
+		},
+		"tres_uns": {
+			"alfabeto": ["0", "1"],
+			"estados_finais": ["H"],
+			"estados" : ["E", "F", "G", "H"],
+			"estado_inicial": "E",
+			"transicoes": [
+				[["E", "1"], ["F"]],
+				[["F", "1"], ["G"]],
+				[["G", "1"], ["H"]],
+				[["H", ""], []]
 			]
 		}
 	}
