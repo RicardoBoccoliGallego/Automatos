@@ -59,7 +59,7 @@ def main():
         clusters.append(cluster)
 
         if DEBUG:
-            print "Automato " + maq + " lido:"
+            print "Automato '" + maq + "' lido:"
         automatos[maq] = Automato(dados["maquinas"][maq]["estados"], dados["maquinas"][maq]["estado_inicial"]\
             , dados["maquinas"][maq]["estados_finais"], dados["maquinas"][maq]["alfabeto"], dados["maquinas"][maq]["transicoes"])
         # Adiciona ao grafo os estados
@@ -77,7 +77,6 @@ def main():
         # Adiciona as transições
         for transicao in automatos[maq].transicoes:
             orig = [t for t in subgrafo_nos if t.get_name() == transicao[0]]
-            
             # Transição normal
             if len(automatos[maq].transicoes[transicao]) == 1 and len(transicao[1]) > 0:
                 dest = [t for t in subgrafo_nos if t.get_name() == automatos[maq].transicoes[transicao][0]]
