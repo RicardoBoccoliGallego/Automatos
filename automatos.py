@@ -72,18 +72,21 @@ def main():
             cluster.add_node(no)
         no_invisivel = pydot.Node("INVISIVEL" + maq, style="invisible")
         cluster.add_node(no_invisivel)
-        orig = [t for t in subgrafo_nos if t.get_name() == automatos[maq].estado_inicial]
+        orig = [t for t in subgrafo_nos if t.get_name().replace("'","").replace('"','') == automatos[maq].estado_inicial]
         cluster.add_edge(pydot.Edge(no_invisivel, orig[0]))
         # Adiciona as transições
         for transicao in automatos[maq].transicoes:
-            orig = [t for t in subgrafo_nos if t.get_name() == transicao[0]]
+            orig = [t for t in subgrafo_nos if t.get_name().replace("'","").replace('"','') == transicao[0]]
             # Transição normal
-            if len(automatos[maq].transicoes[transicao]) == 1 and len(transicao[1]) > 0:
-                dest = [t for t in subgrafo_nos if t.get_name() == automatos[maq].transicoes[transicao][0]]
+            print transicao
+            print automatos[maq].transicoes[transicao]
+            if len(automatos[maq].transicoes[transicao]) == 1:
+                dest = [t for t in subgrafo_nos if t.get_name().replace("'","").replace('"','') == automatos[maq].transicoes[transicao][0]]
                 cluster.add_edge(pydot.Edge(orig[0], dest[0], label= " " + transicao[1]))
             # Transição de empilhar
             elif len(automatos[maq].transicoes[transicao]) == 2:
-                dest = [t for t in subgrafo_nos if t.get_name() == automatos[maq].transicoes[transicao][0]]
+                dest = [t for t in subgrafo_nos if t.get_name().replace("'","").replace('"','') == automatos[maq].transicoes[transicao][0]]
+
                 cluster.add_edge(pydot.Edge(orig[0], dest[0], label= " " + automatos[maq].transicoes[transicao][1], style="dashed"))
         grafo.add_subgraph(cluster)
     grafo.write_png("grafo.png")
@@ -116,9 +119,20 @@ def main():
                     break
                 estado_atual = ret[0]
                 automato_atual = ret[1]
+
+            #Tenta ler mais
+            while automatos[automato_atual].transicoes.has_key((estado_atual, "")):
+                if len(automatos[automato_atual].transicoes[(estado_atual, "")]) == 1:
+                    if DEBUG:
+                        print automato_atual + ": Saindo do estado " + estado_atual + " e consumindo vazio para ir para o estado " + automatos[automato_atual].transicoes[(estado_atual, "")][0]
+                    estado_atual = automatos[automato_atual].transicoes[(estado_atual, "")][0];
+                else:
+                    break
+    
             if (not rejeitar) and len(pilha) == 0 and automatos[automato_atual].estados_finais.count(estado_atual) > 0:
                 print "Cadeia " + leitura + " aceita no estado " + estado_atual
             else:
+               
                 print "Cadeia " + leitura + " não aceita",
                 if rejeitar:
                     print u"pois não foi encontrada uma transição"
@@ -144,13 +158,13 @@ def le_simbolo(simbolo, automatos, estado_atual, automato_atual, pilha):
             pilha.append((transicao[0], automato_atual))
             return le_simbolo(simbolo, automatos, automatos[transicao[1]].estado_inicial, transicao[1], pilha)
         # Desempilha
-        else:
+        elif len(transicao) == 0:
             # Nada para desempilhar, rejeita
-            if len(pilha) == 0:
+            if len(pilha) == 0 and estado_atual not in automatos[automato_atual].estados_finais:
                 if DEBUG:
                     print automato_atual + u": Tentando desempilhar mas a pilha está vazia"
                 return ([])
-            else:
+            elif len(pilha) != 0:
                 if DEBUG:
                     print automato_atual + ": Saindo do estado " + estado_atual + " e desempilhando estado " + pilha[-1][0] + u", indo para a submáquina " + pilha[-1][1]
                 desempilha = pilha.pop()
@@ -167,5 +181,12 @@ def le_simbolo(simbolo, automatos, estado_atual, automato_atual, pilha):
                 return le_simbolo(simbolo, automatos, desempilha[0], desempilha[1], pilha)
         if DEBUG:
             print automato_atual + ": No estado " + estado_atual + (u" não há transições em vazio e nem transições consumindo ") + simbolo 
-        return ()
+        #Tansição vazia
+    if automatos[automato_atual].transicoes.has_key((estado_atual, "")):
+        transicao = automatos[automato_atual].transicoes[(estado_atual, "")]
+        if len(transicao) == 1:
+            if DEBUG:
+                print automato_atual + ": Saindo do estado " + estado_atual + " e consumindo vazio para ir para o estado " + automatos[automato_atual].transicoes[(estado_atual, "")][0]
+            return le_simbolo(simbolo, automatos, automatos[automato_atual].transicoes[(estado_atual, "")][0], automato_atual, pilha)
+    return ()
 main()
